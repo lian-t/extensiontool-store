@@ -1,0 +1,25 @@
+{
+    "list":[
+      {
+        "title": "Node.js",
+        "website": "https://nodejs.org/en/",
+        "des": "Es handelt sich um eine JavaScript-Laufzeitumgebung, die auf der Chrome V8-Engine basiert.",
+        "logo": "icons/node-logo.svg",
+        "urls": {
+          "cn": "http://nodejs.cn/",
+          "git": "https://github.com/nodejs/node"
+        },
+        "tags": [ "Serverseite", "Backend" ]
+      }
+    ],
+    "useState":[
+      { "title": "Meine Favoriten", "tag": "__star__" },
+      { "title": "ganz", "tag": "all" },
+      { "title": "Frontend", "tag": "Frontend" },
+      { "title": "Backend", "tag": "Backend" },
+      { "title": "Werkzeug", "tag": "Werkzeugbibliothek" }
+    ],
+    "title":"Entwicklungsunterlagen",
+    "collect":"Ich habe es noch nicht gesammelt, beeil dich und sammle es ein",
+    "search":"Bitte geben Sie Suchinhalte ein"
+  }

@@ -1,0 +1,25 @@
+{
+    "list":[
+      {
+        "title": "Node.js",
+        "website": "https://nodejs.org/en/",
+        "des": "Chrome V 8エンジンに基づくJavaScript実行環境です。",
+        "logo": "icons/node-logo.svg",
+        "urls": {
+          "cn": "http://nodejs.cn/",
+          "git": "https://github.com/nodejs/node"
+        },
+        "tags": [ "サービス・エンド", "バックエンド" ]
+      }
+    ],
+    "useState":[
+      { "title": "私のコレクション", "tag": "__star__" },
+      { "title": "すべて", "tag": "all" },
+      { "title": "フロントエンド", "tag": "フロントエンド" },
+      { "title": "バックエンド", "tag": "バックエンド" },
+      { "title": "ツール", "tag": "ツールライブラリ" }
+    ],
+    "title":"ドキュメントの開発",
+    "collect":"まだコレクションしていないので、急いでコレクションに行きましょう",
+    "search":"検索内容を入力してください"
+  }

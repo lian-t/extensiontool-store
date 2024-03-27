@@ -1,0 +1,25 @@
+{
+    "list":[
+      {
+        "title": "Node.js",
+        "website": "https://nodejs.org/en/",
+        "des": "Est un environnement d'exécution JavaScript basé sur le moteur Chrome V8.",
+        "logo": "icons/node-logo.svg",
+        "urls": {
+          "cn": "http://nodejs.cn/",
+          "git": "https://github.com/nodejs/node"
+        },
+        "tags": [ "Côté Service", "Back - end" ]
+      }
+    ],
+    "useState":[
+      { "title": "Ma collection", "tag": "__star__" },
+      { "title": "Tous", "tag": "all" },
+      { "title": "Le Front End", "tag": "Le Front End" },
+      { "title": "Back - end", "tag": "Back - end" },
+      { "title": "Outils", "tag": "Bibliothèque d'outils" }
+    ],
+    "title":"Documentation de développement",
+    "collect":"Pas encore de collection, allez vite à la collection",
+    "search":"Veuillez entrer le contenu de votre recherche"
+  }
