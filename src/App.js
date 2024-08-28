@@ -2,26 +2,34 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import GitHubCorners from '@uiw/react-github-corners';
 import Footer from './component/Footer';
-import source from './document.json';
+// import source from './document.json';
 import { github, zhHans, website } from './component/Icons';
 import './App.scss';
 
 const initStar = JSON.parse(localStorage.getItem('osc-doc-star'));
 const initTag = JSON.parse(localStorage.getItem('osc-doc-tag'));
 
+var language = navigator.language || navigator.userLanguage; 
+var fileName = language ? language +'.json' :'zh.json'
+const data = require('./document/'+fileName)
+
+let source = data
+const languageList = [
+    { value: 'zh', label: 'chinese' },
+    { value: 'en', label: 'english' },
+    { value: 'de', label: 'german' },
+    { value: 'ara', label: 'arabic' },
+    { value: 'jp', label: 'japanese' },
+    { value: 'kor', label: 'french' },
+  ]
 function useData() {
-    const [lists] = useState(source || []);
+    const [lists,setLists] = useState(source);
     const [star, setStar] = useState(initStar || []);
     const [tag, setTag] = useState(initTag || 'all');
     const [query, setQuery] = useState('');
-    const [subMenu] = useState([
-        { title: '我的收藏', tag: '__star__' },
-        { title: '全部', tag: 'all' },
-        { title: '前端', tag: '前端' },
-        { title: '后端', tag: '后端' },
-        { title: '工具', tag: '工具库' },
-    ]);
-
+    const [subMenu,setSubMenu] = useState(lists.useState);
+    const [selected,setSelectedOptions] = useState([]);
+     
     useEffect(() => {
         const docs = localStorage.getItem('osc-doc');
         if (!docs) {
@@ -42,19 +50,26 @@ function useData() {
         localStorage.setItem('osc-doc-star', JSON.stringify(arr));
     }
 
-    const getFilterLists = () => !query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1);
-
-    return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, getFilterLists };
+    const changeLanguage = (e) => {
+        setSelectedOptions(e.target.value)
+        console.log(e.target.value)
+        let lists = require('./document/'+e.target.value +'.json')
+        let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
+        setLists(a)        
+        setSubMenu(a.useState)
+    }
+     
+    return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, changeLanguage, selected,setSelectedOptions };
 }
 
 export default function App() {
-    const { star, tag, setQuery, subMenu, changeTag, getFilterLists, addStar } = useData();
+    const { star, tag, setQuery, subMenu, changeTag, addStar, changeLanguage, selected, lists } = useData();
     return (
         <div className="warpper">
-            <GitHubCorners fixed position="left" size={62} zIndex={1000} href="https://github.com/jaywcjlove/dev-site" target="__blank" />
+            {/* <GitHubCorners fixed position="left" size={62} zIndex={1000} href="https://github.com/jaywcjlove/dev-site" target="__blank" /> */}
             <div className="header">
-                <span className="title">开发文档</span>
-                {tag === 'all' && <input placeholder="输入搜索内容" className="search" onChange={(e) => setQuery(e.target.value)} />}
+                <span className="title">{lists.title}</span>
+                {tag === 'all' && <input placeholder={lists.search} className="search" onChange={(e) => setQuery(e.target.value)} />}
                 <div className="tag">
                     {subMenu.map((item, idx) => {
                         return (
@@ -70,10 +85,22 @@ export default function App() {
                         );
                     })}
                 </div>
+                <div className="tag language">
+                    <select value={selected || []} onChange={changeLanguage} multiple={false}>
+                        {languageList.map((item,index) => {
+                            return (
+                                <option key={item.label} value={item.value}>
+                                    {item.label}
+                                </option>
+                            )
+                        })}
+                        
+                    </select>
+                </div>
             </div>
-            {star.length === 0 && tag === '__star__' && <div className="noFind">还没有收藏，赶紧去收藏吧</div>}
+            {star.length === 0 && tag === '__star__' && <div className="noFind">{lists.collect}</div>}
             <ul className="lists">
-                {getFilterLists().map((item, idx) => {
+                {lists.list.map((item, idx) => {
                     const urls = [];
                     for (const key in item.urls) {
                         if (Object.prototype.hasOwnProperty.call(item.urls, key)) {

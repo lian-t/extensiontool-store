@@ -1,0 +1,25 @@
+{
+    "list":[
+      {
+        "title": "Node.js",
+        "website": "https://nodejs.org/en/",
+        "des": "هو جافا سكريبت بيئة التشغيل على أساس كروم V8 .",
+        "logo": "icons/node-logo.svg",
+        "urls": {
+          "cn": "http://nodejs.cn/",
+          "git": "https://github.com/nodejs/node"
+        },
+        "tags": [ "الخادم", "النهاية الخلفية" ]
+      }
+    ],
+    "useState":[
+      { "title": "ماي كولكشن", "tag": "__star__" },
+      { "title": "كامل", "tag": "all" },
+      { "title": "أمامي", "tag": "أمامي" },
+      { "title": "النهاية الخلفية", "tag": "النهاية الخلفية" },
+      { "title": "أداة .", "tag": "مكتبة الأدوات" }
+    ],
+    "title":"تطوير الوثائق",
+    "collect":"ليس بعد جمع ، جمع بسرعة",
+    "search":"الرجاء إدخال محتوى البحث"
+  }

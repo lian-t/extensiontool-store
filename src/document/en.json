@@ -1,0 +1,25 @@
+{
+    "list":[
+      {
+        "title": "Node.js",
+        "website": "https://nodejs.org/en/",
+        "des": "It is a JavaScript runtime environment based on Chrome V8 engine",
+        "logo": "icons/node-logo.svg",
+        "urls": {
+          "cn": "http://nodejs.cn/",
+          "git": "https://github.com/nodejs/node"
+        },
+        "tags": [ "Server side", "back-end" ]
+      }
+    ],
+    "useState":[
+      { "title": "My favorites", "tag": "__star__" },
+      { "title": "all", "tag": "all" },
+      { "title": "front end", "tag": "front end" },
+      { "title": "back-end", "tag": "back-end" },
+      { "title": "tool", "tag": "tool" }
+    ],
+    "title":"Development documentation",
+    "collect":"haven't collected it yet, hurry up and collect it",
+    "search":"Please enter search content"
+  }
