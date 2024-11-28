@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import GitHubCorners from '@uiw/react-github-corners';
 import Footer from './component/Footer';
-// import source from './document.json';
+import source from './document.json';
 import { github, zhHans, website } from './component/Icons';
 import './App.scss';
 
