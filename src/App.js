@@ -138,7 +138,44 @@ function useData() {
         }
     }, []);
 
-    // ... 其他代码保持不变 ...
+    const changeTag = (str) => {
+        setTag(str);
+        setQuery('');
+        localStorage.setItem('osc-doc-tag', JSON.stringify(str));
+    }
+
+    const addStar = (title) => {
+        const arr = [...star];
+        arr.indexOf(title) === -1 ? arr.push(title) : arr.splice(arr.indexOf(title), 1);
+        setStar(arr);
+        localStorage.setItem('osc-doc-star', JSON.stringify(arr));
+    }
+
+    // const changeLanguage = (e) => {
+    //     setSelectedOptions(e.target.value)
+    //     console.log(e.target.value)
+    //     let lists = require('./document/'+e.target.value +'.json')
+    //     let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
+    //     setLists(a)        
+    //     setSubMenu(a.useState)
+    // }
+
+    const changeLanguage = (e) => {
+        const selectedLang = e.target.value;
+        setSelectedOptions(selectedLang);
+        try {
+            // 动态导入对应的语言文件
+            const lists = require(`./document/${selectedLang}.json`);
+            setLists(lists);
+            setSubMenu(lists.useState || []); // 添加空数组作为默认值
+            localStorage.setItem('selected-language', selectedLang); // 保存语言选择
+        } catch (error) {
+            console.error(`无法加载语言文件: ${selectedLang}`, error);
+        }
+    }
+
+    return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, changeLanguage, selected,setSelectedOptions };
+
 }
 
 
