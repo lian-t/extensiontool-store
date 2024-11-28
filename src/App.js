@@ -15,12 +15,12 @@ const data = require('./document/'+fileName)
 
 let source = data
 const languageList = [
-    { value: 'zh', label: 'chinese' },
-    { value: 'en', label: 'english' },
-    { value: 'de', label: 'german' },
-    { value: 'ara', label: 'arabic' },
-    { value: 'jp', label: 'japanese' },
-    { value: 'kor', label: 'french' },
+    { value: 'zh', label: '中文' },
+    { value: 'en', label: 'English' },
+    { value: 'de', label: 'Deutsch' },
+    { value: 'ara', label: 'العربية' },
+    { value: 'jp', label: '日本語' },
+    { value: 'kor', label: '한국어' },
   ]
 function useData() {
     const [lists,setLists] = useState(source);
@@ -30,10 +30,30 @@ function useData() {
     const [subMenu,setSubMenu] = useState(lists.useState);
     const [selected,setSelectedOptions] = useState([]);
      
+    // useEffect(() => {
+    //     const docs = localStorage.getItem('osc-doc');
+    //     if (!docs) {
+    //         localStorage.setItem('osc-doc', JSON.stringify(source));
+    //     }
+    // }, []);
+
     useEffect(() => {
-        const docs = localStorage.getItem('osc-doc');
-        if (!docs) {
-            localStorage.setItem('osc-doc', JSON.stringify(source));
+        // 从 localStorage 获取上次选择的语言，如果没有则使用浏览器语言
+        const savedLanguage = localStorage.getItem('selected-language');
+        const browserLang = navigator.language.split('-')[0];
+        const defaultLang = savedLanguage || browserLang || 'zh';
+        
+        try {
+            const lists = require(`./document/${defaultLang}.json`);
+            setLists(lists);
+            setSubMenu(lists.useState || []);
+            setSelectedOptions(defaultLang);
+        } catch (error) {
+            console.error('加载默认语言失败，使用中文', error);
+            const zhLists = require('./document/zh.json');
+            setLists(zhLists);
+            setSubMenu(zhLists.useState || []);
+            setSelectedOptions('zh');
         }
     }, []);
 
@@ -50,14 +70,29 @@ function useData() {
         localStorage.setItem('osc-doc-star', JSON.stringify(arr));
     }
 
+    // const changeLanguage = (e) => {
+    //     setSelectedOptions(e.target.value)
+    //     console.log(e.target.value)
+    //     let lists = require('./document/'+e.target.value +'.json')
+    //     let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
+    //     setLists(a)        
+    //     setSubMenu(a.useState)
+    // }
+
     const changeLanguage = (e) => {
-        setSelectedOptions(e.target.value)
-        console.log(e.target.value)
-        let lists = require('./document/'+e.target.value +'.json')
-        let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
-        setLists(a)        
-        setSubMenu(a.useState)
+        const selectedLang = e.target.value;
+        setSelectedOptions(selectedLang);
+        try {
+            // 动态导入对应的语言文件
+            const lists = require(`./document/${selectedLang}.json`);
+            setLists(lists);
+            setSubMenu(lists.useState || []); // 添加空数组作为默认值
+            localStorage.setItem('selected-language', selectedLang); // 保存语言选择
+        } catch (error) {
+            console.error(`无法加载语言文件: ${selectedLang}`, error);
+        }
     }
+
      
     return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, changeLanguage, selected,setSelectedOptions };
 }
