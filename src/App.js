@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import GitHubCorners from '@uiw/react-github-corners';
 import Footer from './component/Footer';
-import source from './document.json';
+// import source from './document.json';
+
+import source from './document/zh.json';  // 确保使用正确的文件名
+
 import { github, zhHans, website } from './component/Icons';
 import './App.scss';
 
@@ -13,7 +16,7 @@ var language = navigator.language || navigator.userLanguage;
 var fileName = language ? language +'.json' :'zh.json'
 const data = require('./document/'+fileName)
 
-let source = data
+// let source = data
 const languageList = [
     { value: 'zh', label: '中文' },
     { value: 'en', label: 'English' },
