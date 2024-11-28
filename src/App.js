@@ -9,149 +9,31 @@ import './App.scss';
 const initStar = JSON.parse(localStorage.getItem('osc-doc-star'));
 const initTag = JSON.parse(localStorage.getItem('osc-doc-tag'));
 
-
-
-
-var language = navigator.language || navigator.userLanguage;
-// 将语言代码转换为文件名格式
-var fileName = 'zh.json'; // 默认中文
-if (language) {
-    const langCode = language.split('-')[0]; // 提取主语言代码
-    // 检查是否支持该语言
-    const isSupported = languageList.some(item => item.value === langCode);
-    if (isSupported) {
-        fileName = `${langCode}.json`;
-    }
-}
-const data = require(`./document/${fileName}`);
-
-
-
-// var fileName = language ? language +'.json' :'zh.json'
-// const data = require('./document/'+fileName)
+var language = navigator.language || navigator.userLanguage; 
+var fileName = language ? language +'.json' :'zh.json'
+const data = require('./document/'+fileName)
 
 let source = data
 const languageList = [
-    { value: 'zh', label: '中文' },
-    { value: 'en', label: 'English' },
-    { value: 'de', label: 'Deutsch' },
-    { value: 'ara', label: 'العربية' },
-    { value: 'jp', label: '日本語' },
-    { value: 'kor', label: '한국어' },
+    { value: 'zh', label: 'chinese' },
+    { value: 'en', label: 'english' },
+    { value: 'de', label: 'german' },
+    { value: 'ara', label: 'arabic' },
+    { value: 'jp', label: 'japanese' },
+    { value: 'kor', label: 'french' },
   ]
-// function useData() {
-//     const [lists,setLists] = useState(source);
-//     const [star, setStar] = useState(initStar || []);
-//     const [tag, setTag] = useState(initTag || 'all');
-//     const [query, setQuery] = useState('');
-//     const [subMenu,setSubMenu] = useState(lists.useState);
-//     const [selected,setSelectedOptions] = useState([]);
-     
-//     // useEffect(() => {
-//     //     const docs = localStorage.getItem('osc-doc');
-//     //     if (!docs) {
-//     //         localStorage.setItem('osc-doc', JSON.stringify(source));
-//     //     }
-//     // }, []);
-
-//     useEffect(() => {
-//         // 从 localStorage 获取上次选择的语言，如果没有则使用浏览器语言
-//         const savedLanguage = localStorage.getItem('selected-language');
-//         const browserLang = navigator.language.split('-')[0];
-//         const defaultLang = savedLanguage || browserLang || 'zh';
-        
-//         try {
-//             const lists = require(`./document/${defaultLang}.json`);
-//             setLists(lists);
-//             setSubMenu(lists.useState || []);
-//             setSelectedOptions(defaultLang);
-//         } catch (error) {
-//             console.error('加载默认语言失败，使用中文', error);
-//             const zhLists = require('./document/zh.json');
-//             setLists(zhLists);
-//             setSubMenu(zhLists.useState || []);
-//             setSelectedOptions('zh');
-//         }
-//     }, []);
-
-//     const changeTag = (str) => {
-//         setTag(str);
-//         setQuery('');
-//         localStorage.setItem('osc-doc-tag', JSON.stringify(str));
-//     }
-
-//     const addStar = (title) => {
-//         const arr = [...star];
-//         arr.indexOf(title) === -1 ? arr.push(title) : arr.splice(arr.indexOf(title), 1);
-//         setStar(arr);
-//         localStorage.setItem('osc-doc-star', JSON.stringify(arr));
-//     }
-
-//     // const changeLanguage = (e) => {
-//     //     setSelectedOptions(e.target.value)
-//     //     console.log(e.target.value)
-//     //     let lists = require('./document/'+e.target.value +'.json')
-//     //     let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
-//     //     setLists(a)        
-//     //     setSubMenu(a.useState)
-//     // }
-
-//     const changeLanguage = (e) => {
-//         const selectedLang = e.target.value;
-//         setSelectedOptions(selectedLang);
-//         try {
-//             // 动态导入对应的语言文件
-//             const lists = require(`./document/${selectedLang}.json`);
-//             setLists(lists);
-//             setSubMenu(lists.useState || []); // 添加空数组作为默认值
-//             localStorage.setItem('selected-language', selectedLang); // 保存语言选择
-//         } catch (error) {
-//             console.error(`无法加载语言文件: ${selectedLang}`, error);
-//         }
-//     }
-
-     
-//     return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, changeLanguage, selected,setSelectedOptions };
-// }
-
-
-
-
 function useData() {
-    const [lists, setLists] = useState(source);  // 使用 source 作为初始值
+    const [lists,setLists] = useState(source);
     const [star, setStar] = useState(initStar || []);
     const [tag, setTag] = useState(initTag || 'all');
     const [query, setQuery] = useState('');
-    const [subMenu, setSubMenu] = useState([]);  // 初始化为空数组
-    const [selected, setSelectedOptions] = useState('zh');  // 默认设置为中文
-
+    const [subMenu,setSubMenu] = useState(lists.useState);
+    const [selected,setSelectedOptions] = useState([]);
+     
     useEffect(() => {
-        try {
-            // 从 localStorage 获取上次选择的语言
-            const savedLanguage = localStorage.getItem('selected-language');
-            const browserLang = navigator.language.split('-')[0];
-            const defaultLang = savedLanguage || browserLang || 'zh';
-            
-            console.log('当前语言:', defaultLang); // 调试日志
-            
-            // 确保语言代码是有效的
-            const validLang = languageList.some(item => item.value === defaultLang) 
-                ? defaultLang 
-                : 'zh';
-            
-            const languageData = require(`./document/${validLang}.json`);
-            console.log('加载的数据:', languageData); // 调试日志
-            
-            setLists(languageData);
-            setSubMenu(languageData.useState || []);
-            setSelectedOptions(validLang);
-            
-        } catch (error) {
-            console.error('加载语言文件失败:', error);
-            // 回退到默认数据
-            setLists(source);
-            setSubMenu(source.useState || []);
-            setSelectedOptions('zh');
+        const docs = localStorage.getItem('osc-doc');
+        if (!docs) {
+            localStorage.setItem('osc-doc', JSON.stringify(source));
         }
     }, []);
 
@@ -168,36 +50,17 @@ function useData() {
         localStorage.setItem('osc-doc-star', JSON.stringify(arr));
     }
 
-    // const changeLanguage = (e) => {
-    //     setSelectedOptions(e.target.value)
-    //     console.log(e.target.value)
-    //     let lists = require('./document/'+e.target.value +'.json')
-    //     let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
-    //     setLists(a)        
-    //     setSubMenu(a.useState)
-    // }
-
     const changeLanguage = (e) => {
-        const selectedLang = e.target.value;
-        setSelectedOptions(selectedLang);
-        try {
-            // 动态导入对应的语言文件
-            const lists = require(`./document/${selectedLang}.json`);
-            setLists(lists);
-            setSubMenu(lists.useState || []); // 添加空数组作为默认值
-            localStorage.setItem('selected-language', selectedLang); // 保存语言选择
-        } catch (error) {
-            console.error(`无法加载语言文件: ${selectedLang}`, error);
-        }
+        setSelectedOptions(e.target.value)
+        console.log(e.target.value)
+        let lists = require('./document/'+e.target.value +'.json')
+        let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
+        setLists(a)        
+        setSubMenu(a.useState)
     }
-
+     
     return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, changeLanguage, selected,setSelectedOptions };
-
 }
-
-
-
-
 
 export default function App() {
     const { star, tag, setQuery, subMenu, changeTag, addStar, changeLanguage, selected, lists } = useData();
