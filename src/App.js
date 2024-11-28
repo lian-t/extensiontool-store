@@ -40,10 +40,29 @@ function useData() {
     const [subMenu,setSubMenu] = useState(lists.useState);
     const [selected,setSelectedOptions] = useState([]);
      
+    // useEffect(() => {
+    //     const docs = localStorage.getItem('osc-doc');
+    //     if (!docs) {
+    //         localStorage.setItem('osc-doc', JSON.stringify(source));
+    //     }
+    // }, []);
+
     useEffect(() => {
-        const docs = localStorage.getItem('osc-doc');
-        if (!docs) {
-            localStorage.setItem('osc-doc', JSON.stringify(source));
+        try {
+            // 从 localStorage 获取上次选择的语言
+            const savedLanguage = localStorage.getItem('selected-language') || 'zh';
+            
+            if (savedLanguage !== 'zh') {
+                const languageData = require(`./document/${savedLanguage}.json`);
+                setLists(languageData);
+                setSubMenu(languageData.useState || []);
+                setSelectedOptions(savedLanguage);
+            }
+        } catch (error) {
+            console.error('加载语言文件失败，使用默认中文:', error);
+            setLists(source);
+            setSubMenu(source.useState || []);
+            setSelectedOptions('zh');
         }
     }, []);
 
@@ -69,13 +88,31 @@ function useData() {
     //     setSubMenu(a.useState)
     // }
     
+    // const changeLanguage = (e) => {
+    //     const lang = e.target.value;
+    //     const data = languageFiles[lang] || languageFiles.zh;
+    //     setLists(data);
+    //     setSubMenu(data.useState || []);
+    //     setSelectedOptions(lang);
+    //     localStorage.setItem('selected-language', lang);
+    // };
+
+
     const changeLanguage = (e) => {
         const lang = e.target.value;
-        const data = languageFiles[lang] || languageFiles.zh;
-        setLists(data);
-        setSubMenu(data.useState || []);
-        setSelectedOptions(lang);
-        localStorage.setItem('selected-language', lang);
+        try {
+            const data = require(`./document/${lang}.json`);
+            setLists(data);
+            setSubMenu(data.useState || []);
+            setSelectedOptions(lang);
+            localStorage.setItem('selected-language', lang);
+        } catch (error) {
+            console.error('语言切换失败:', error);
+            // 如果加载失败，回退到中文
+            setLists(source);
+            setSubMenu(source.useState || []);
+            setSelectedOptions('zh');
+        }
     };
 
     return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, changeLanguage, selected,setSelectedOptions };
