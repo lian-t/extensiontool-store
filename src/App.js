@@ -15,13 +15,23 @@ const data = require('./document/'+fileName)
 
 let source = data
 const languageList = [
-    { value: 'zh', label: 'chinese' },
-    { value: 'en', label: 'english' },
-    { value: 'de', label: 'german' },
-    { value: 'ara', label: 'arabic' },
-    { value: 'jp', label: 'japanese' },
-    { value: 'kor', label: 'french' },
+    { value: 'zh', label: '中文' },
+    { value: 'en', label: 'English' },
+    { value: 'jp', label: '日本語' },
+    { value: 'de', label: 'Deutsch' },
+    { value: 'ara', label: 'العربية' },
+    { value: 'kor', label: '한국어' }
   ]
+
+const languageFiles = {
+    zh: require('./document/zh.json'),
+    en: require('./document/en.json'),
+    jp: require('./document/jp.json'),
+    de: require('./document/de.json'),
+    ara: require('./document/ara.json'),
+    kor: require('./document/kor.json')
+};
+
 function useData() {
     const [lists,setLists] = useState(source);
     const [star, setStar] = useState(initStar || []);
@@ -50,15 +60,24 @@ function useData() {
         localStorage.setItem('osc-doc-star', JSON.stringify(arr));
     }
 
+    // const changeLanguage = (e) => {
+    //     setSelectedOptions(e.target.value)
+    //     console.log(e.target.value)
+    //     let lists = require('./document/'+e.target.value +'.json')
+    //     let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
+    //     setLists(a)        
+    //     setSubMenu(a.useState)
+    // }
+    
     const changeLanguage = (e) => {
-        setSelectedOptions(e.target.value)
-        console.log(e.target.value)
-        let lists = require('./document/'+e.target.value +'.json')
-        let a =!query ? lists : lists.filter(item => item.title.toLowerCase().indexOf(query.toLowerCase()) > -1)
-        setLists(a)        
-        setSubMenu(a.useState)
-    }
-     
+        const lang = e.target.value;
+        const data = languageFiles[lang] || languageFiles.zh;
+        setLists(data);
+        setSubMenu(data.useState || []);
+        setSelectedOptions(lang);
+        localStorage.setItem('selected-language', lang);
+    };
+
     return { lists, star, setStar, tag, setTag, query, setQuery, subMenu, changeTag, addStar, changeLanguage, selected,setSelectedOptions };
 }
 
@@ -153,7 +172,7 @@ export default function App() {
                     return null;
                 })}
             </ul>
-            
+
             <Footer>
                 Copyright © 2018 <a target="_blank" rel="noopener noreferrer" href="https://github.com/jaywcjlove/dev-site">dev-site</a>
             </Footer>
