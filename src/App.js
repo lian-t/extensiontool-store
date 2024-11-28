@@ -9,9 +9,26 @@ import './App.scss';
 const initStar = JSON.parse(localStorage.getItem('osc-doc-star'));
 const initTag = JSON.parse(localStorage.getItem('osc-doc-tag'));
 
-var language = navigator.language || navigator.userLanguage; 
-var fileName = language ? language +'.json' :'zh.json'
-const data = require('./document/'+fileName)
+
+
+
+var language = navigator.language || navigator.userLanguage;
+// 将语言代码转换为文件名格式
+var fileName = 'zh.json'; // 默认中文
+if (language) {
+    const langCode = language.split('-')[0]; // 提取主语言代码
+    // 检查是否支持该语言
+    const isSupported = languageList.some(item => item.value === langCode);
+    if (isSupported) {
+        fileName = `${langCode}.json`;
+    }
+}
+const data = require(`./document/${fileName}`);
+
+
+
+// var fileName = language ? language +'.json' :'zh.json'
+// const data = require('./document/'+fileName)
 
 let source = data
 const languageList = [
